@@ -3,6 +3,9 @@ import 'package:quizler/main.dart';
 import 'question.dart';
 
 class Quizbrain {
+  // _questionNumber == this is a Private Variable so no one can Vulnerate it
+  int _questionNumber = 0;
+
   // _questionBank == this is a Private Variable so no one can Vulnerate it
   final List _questionBank = [
     Question(q: 'Some cats are actually allergic to humans', a: true),
@@ -34,14 +37,24 @@ class Quizbrain {
         a: true),
   ];
 
+  void nextQuestion() {
+    if (_questionNumber < _questionBank.length - 1) {
+      _questionNumber++;
+    }
+  }
+
+  void reset() {
+    _questionNumber = 0;
+  }
+
 //This is a Function but in Class it is called Method
 //This is a Method to get the Question from the _questionBank
   String getQuizQuestion() {
-    return _questionBank[questionNumber].questionText;
+    return _questionBank[_questionNumber].questionText;
   }
 
 //This is a Method to get the Answer from the _questionBank
   bool getQuizAnswer() {
-    return _questionBank[questionNumber].questionAnswer;
+    return _questionBank[_questionNumber].questionAnswer;
   }
 }

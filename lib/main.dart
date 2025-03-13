@@ -35,8 +35,6 @@ class QuizPage extends StatefulWidget {
 
 // List<bool> answers = [false, true, true];
 
-int questionNumber = 0;
-
 class _QuizPageState extends State<QuizPage> {
   @override
   Widget build(BuildContext context) {
@@ -50,7 +48,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                Quizbrain().getQuizQuestion(),
+                quizbrain.getQuizQuestion(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -76,14 +74,14 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = Quizbrain().getQuizAnswer();
+                bool correctAnswer = quizbrain.getQuizAnswer();
                 if (correctAnswer == true) {
                   print('User got it right!');
                 } else {
                   print('User got it wrong!');
                 }
                 setState(() {
-                  questionNumber++;
+                  quizbrain.nextQuestion();
                 });
               },
             ),
@@ -104,20 +102,32 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = Quizbrain().getQuizAnswer();
+                bool correctAnswer = quizbrain.getQuizAnswer();
                 if (correctAnswer == true) {
                   print('User got it right!');
                 } else {
                   print('User got it wrong!');
                 }
                 setState(() {
-                  questionNumber++;
+                  quizbrain.nextQuestion();
                 });
               },
             ),
           ),
         ),
         //TODO: Add a Row here as your score keeper
+        Row(
+          children: <Widget>[
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          ],
+        )
       ],
     );
   }
