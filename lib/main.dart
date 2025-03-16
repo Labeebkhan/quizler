@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quizler/question.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quizbrain.dart';
 
 Quizbrain quizbrain = Quizbrain();
@@ -27,15 +29,32 @@ class QuizPage extends StatefulWidget {
   _QuizPageState createState() => _QuizPageState();
 }
 
-// List<String> questions = [
-//   'You can lead a cow down stairs but not up stairs.',
-//   'Approximately one quarter of human bones are in the feet.',
-//   'A slug\'s blood is green.'
-// ];
-
-// List<bool> answers = [false, true, true];
-
 class _QuizPageState extends State<QuizPage> {
+  List<Icon> scorekeeper = []; // Changed to List<Icon> for type safety
+
+  void userpickedAnswer(bool userChoice) {
+    bool correctAnswer = quizbrain.getQuizAnswer();
+    setState(() {
+      if (userChoice == correctAnswer) {
+        scorekeeper.add(Icon(Icons.check, color: Colors.green));
+      } else {
+        scorekeeper.add(Icon(Icons.close, color: Colors.red));
+      }
+      if (quizbrain.isFinished() == true) {
+        Alert(
+          context: context,
+          title: 'Finished!',
+          desc: 'You\'ve reached the end of the quiz.',
+        ).show();
+
+        quizbrain.reset();
+        scorekeeper = [];
+      } else {
+        quizbrain.nextQuestion();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -74,15 +93,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = quizbrain.getQuizAnswer();
-                if (correctAnswer == true) {
-                  print('User got it right!');
-                } else {
-                  print('User got it wrong!');
-                }
-                setState(() {
-                  quizbrain.nextQuestion();
-                });
+                userpickedAnswer(true);
               },
             ),
           ),
@@ -102,32 +113,15 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = quizbrain.getQuizAnswer();
-                if (correctAnswer == true) {
-                  print('User got it right!');
-                } else {
-                  print('User got it wrong!');
-                }
-                setState(() {
-                  quizbrain.nextQuestion();
-                });
+                userpickedAnswer(false);
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
         Row(
-          children: <Widget>[
-            Icon(
-              Icons.check,
-              color: Colors.green,
-            ),
-            Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
-          ],
+          children: scorekeeper,
         )
+        //TODO: Add a Row here as your score keeper
       ],
     );
   }
